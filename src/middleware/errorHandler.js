@@ -1,4 +1,4 @@
-import createHttpError from 'http-errors';
+import createHttpError, { HttpError } from 'http-errors';
 
 export const errorHandler = (err, req, res, next) => {
     console.error(err);
@@ -8,11 +8,11 @@ export const errorHandler = (err, req, res, next) => {
     let status = 500;
     let message = "Something went wrong. Please try again later.";
 
-    if (createHttpError.isHttpError(err)) {
+    if (err instanceof HttpError) {
         status = err.status;
         message = isProd && status === 500 ? message : err.message;
     } else if (!isProd) {
-
+    
         message = err.message;
     }
 
