@@ -32,7 +32,7 @@ export const createNoteSchema = {
 
 export const updateNoteSchema = {
     [Segments.PARAMS]: Joi.object({
-        NoteId: Joi.string().custom((value, helpers) => {
+        noteId: Joi.string().custom((value, helpers) => {
             if(!isValidObjectId(value)) {
                 return helpers.message('Invalid ObjectId');
             }
@@ -43,6 +43,6 @@ export const updateNoteSchema = {
     [Segments.BODY]: Joi.object ({
         title: Joi.string().min(1),
         content: Joi.string().allow(''),
-        tag: Joi.string().valid(...TAGS).required(),
+        tag: Joi.string().valid(...TAGS),
     }).or('title', 'content', 'tag'),
 };
