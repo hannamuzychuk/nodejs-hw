@@ -1,5 +1,6 @@
 import { Joi, Segments } from "celebrate";
 import { TAGS } from "../constants/tags.js";
+import { isValidObjectId } from "mongoose";
 
 export const getAllNotesSchema = {
    [Segments.QUERY]: Joi.object()({
@@ -8,4 +9,15 @@ export const getAllNotesSchema = {
     tag: Joi.string().valid(...TAGS),
     search: Joi.string().allow(''),
    }),
+};
+
+export const noteIdSchema = {
+    [Segments.PARAMS]: Joi.object({
+        noteId: Joi.string().custom((value, helpers) => {
+            if(!isValidObjectId(value)) {
+                return helpers.message('Invalid ObjectId');
+            }
+            return value;
+        }),
+    }),
 };
