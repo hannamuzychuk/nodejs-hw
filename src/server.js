@@ -8,6 +8,8 @@ import { errorHandler } from './middleware/errorHandler.js';
 import notesRoutes from './routes/notesRoutes.js';
 import { errors } from 'celebrate';
 import cookieParser from "cookie-parser";
+import authRoutes from './routes/authRoutes.js'; 
+import notesRoutes from './routes/notesRoutes.js';
 
 dotenv.config();
 
@@ -19,7 +21,8 @@ app.use(logger);
 app.use(express.json());
 app.use(cors());
 
-app.use(notesRoutes);
+app.use('/auth', authRoutes);
+app.use('/notes', notesRoutes);
 
 app.use(errors()); 
 
