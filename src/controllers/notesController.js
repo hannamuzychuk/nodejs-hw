@@ -12,17 +12,13 @@ export const getAllNotes = async (req, res, next) => {
 
     const filter = { userId: req.user._id };
 
-    const notesQuery = Note.find();
+    if (tag) filter.tag = tag;
+    if (search) filter.$text = { $search: search };
 
-    if (search) {
-        notesQuery.where({$text: { $search: search }});
-    }
-    if (tag) {
-        notesQuery.where('tag').equals(tag);
-    }
+    const notesQuery = Note.find(filter);
 
     const [totalNotes, notes] = await Promise.all([
-        notesQuery.clone().countDocuments(),
+        Note.countDocuments(filter),
         notesQuery.skip(skip).limit(perPage),
     ]);
 
@@ -54,7 +50,7 @@ export const getNoteById = async (req, res) => {
 export const createNote = async (req, res) => {
     const note = await Note.create({
         ...req.body,
-        userid: req.user._id
+        userId: req.user._id
     });
     res.status(201).json(note);
 };

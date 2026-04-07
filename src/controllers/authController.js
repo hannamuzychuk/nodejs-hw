@@ -19,10 +19,10 @@ export const registerUser = async (req, res) => {
     password: hashedPassword,
   });
 
-  const session = await createSession(User._id);
+  const session = await createSession(newUser._id);
     setSessionCookies(res, session);
 
-res.status(201),json(newUser);
+res.status(201).json(newUser);
 };
 
 export const loginUser = async (req, res) => {
