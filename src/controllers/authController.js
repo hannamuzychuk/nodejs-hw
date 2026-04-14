@@ -4,7 +4,10 @@ import { User } from '../models/user.js';
 import { Session } from '../models/session.js';
 import { createSession, setSessionCookies } from '../services/auth.js';
 import jwt from 'jsonwebtoken';
-import { sendEmail } from '../utils/sendEmail.js';
+import { sendEmail } from '../utils/sendMail.js';
+import path from 'node:path';
+import fs from 'node:fs/promises';
+import handlebars from 'handlebars';
 
 export const registerUser = async (req, res) => {
   const { email, password } = req.body;
@@ -110,9 +113,8 @@ export const requestResetEmail  = async (req, res) => {
   
   const templatePath = path.resolve('src/teplates/reset-password.html')   
 
-  const tepblateSource = await fs.readFile(templatePath, 'utf-8');
-
-  const template = handlebars.compile(tepblateSource);
+  const templateSource = await fs.readFile(templatePath, 'utf-8');
+  const template = handlebars.compile(templateSource);
 
   const html = template({
     name: user.name,
